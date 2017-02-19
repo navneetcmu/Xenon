@@ -1,0 +1,43 @@
+#!/bin/bash
+# math.bash
+
+declare -i low
+declare -i high
+declare -i num
+declare -i sum
+declare -i avg
+declare -i rand
+declare -i call
+declare -i para
+
+  
+sum=0
+avg=0
+call=0
+para=100
+
+low=$1
+high=$2
+num=$3
+
+gfortran -Wall -O3 -o program program.f 
+
+for i in `seq $low $high`;do
+    for j in `seq $i $high`;do
+	start=$(date +%s%3N)
+	rand=$(shuf -i 1-$3 -n 1) 
+	./program $i $j $rand >  /dev/null 
+	end=$(date +%s%3N)
+	sum=sum+$((-$start+$end))
+	call=$(($call+1))
+    done
+done
+
+tex=$(bc <<< "scale=3;($sum)/($para)")
+atc=$(bc <<< "scale=3;($sum)/($para*$call)" ) 
+echo $tex $atc
+
+
+
+
+ 
